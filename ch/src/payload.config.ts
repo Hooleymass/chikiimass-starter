@@ -9,12 +9,11 @@ import sharp from 'sharp'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import Posts from './collections/Posts'
-import  Pages  from './collections/Pages'
 import Categories from './collections/Categories'
 import Genres from './collections/Genres'
 import Series from './collections/Series'
 import Videos from './collections/Videos'
-import Video from './collections/Video'
+import Episodes from './collections/Series/Episodes'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -30,8 +29,8 @@ export default buildConfig({
     Categories,
     Genres,
     Series,
+    Episodes,
     Videos,
-    Video
   ],
   editor: lexicalEditor(),
   serverURL: process.env.PaYLOAD_PUBLIC_URL || 'http:localhost:3000',

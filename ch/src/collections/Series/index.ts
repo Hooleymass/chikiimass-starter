@@ -6,7 +6,9 @@ const Series: CollectionConfig = {
         useAsTitle: 'name'
     },
     access: {
+        create: () => true,
         read: () => true,
+        update: () => true,
     },
     fields: [
         {
@@ -48,38 +50,10 @@ const Series: CollectionConfig = {
                 {
                     name: 'episodes',
                     label: 'Episodes',
-                    type: 'array',
-                    fields: [
-                        {
-                            name: 'poster',
-                            type: 'upload',
-                            relationTo: 'media'
-                        },
-                        {
-                            name: 'episodeTitle',
-                            label: 'Episode Title',
-                            type: 'text'
-                        },
-                        {
-                            name: 'episodeDescription',
-                            label: 'Episode Description',
-                            type: 'textarea',
-                        },
-                        {
-                            name: 'video',
-                            label: 'Video Link',
-                            type: 'text',
-                        },
-                        {
-                            name: 'duration',
-                            label: 'Duration',
-                            type: 'number',
-                            admin: {
-                                readOnly: true,
-                            },
-                        },
-                    ]
-                }
+                    type: 'relationship',
+                    relationTo: 'episodes',
+                    hasMany: true,
+                },
             ]
         },
         {

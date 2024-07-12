@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "naqvi.es7-react-snippets",
+        "dsznajder.es7-react-js-snippets",
+        "seyyedkhandon.firacode",
+        "christian-kohler.npm-intellisense",
+        "christian-kohler.path-intellisense"
+    ]
+}
