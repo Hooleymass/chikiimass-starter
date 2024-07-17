@@ -40,7 +40,7 @@ const Series: CollectionConfig = {
                 {
                     name: 'seasonNumber',
                     label: 'Season Number',
-                    type: 'text'
+                    type: 'number'
                 },
                 {
                     name: 'seasonDescription',
@@ -50,9 +50,39 @@ const Series: CollectionConfig = {
                 {
                     name: 'episodes',
                     label: 'Episodes',
-                    type: 'relationship',
-                    relationTo: 'episodes',
-                    hasMany: true,
+                    type: 'array',
+                    fields: [
+                        {
+                            name: 'poster',
+                            type: 'upload',
+                            relationTo: 'media'
+                        },
+                        {
+                            name: 'episodeNumber',
+                            label: 'Episode',
+                            type: 'number'
+                        },
+                        {
+                            name: 'episodeTitle',
+                            label: 'Episode Title',
+                            type: 'text'
+                        },
+                        {
+                            name: 'episodeDescription',
+                            label: 'Episode Description',
+                            type: 'textarea',
+                        },
+                        {
+                            name: 'video',
+                            label: 'Video Link',
+                            type: 'text',
+                        },
+                        {
+                            name: 'createdAt',
+                            label: 'Date',
+                            type: 'date',
+                        },
+                    ],
                 },
             ]
         },
@@ -73,4 +103,4 @@ const Series: CollectionConfig = {
     ]
 }
 
-export default Series
+export default Series;

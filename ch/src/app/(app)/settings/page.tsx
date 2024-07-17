@@ -1,7 +1,7 @@
 "use client";
 import { ThemeContext } from "../context/ThemeContext";
 import { useContext } from "react";
-import Arrow from './arrow-left.svg'
+
 const themes = [
   { name: "light", className: "bg-base" },
   { name: "dark", className: "bg-base" },
@@ -10,7 +10,7 @@ const themes = [
   { name: "aqua", className: "bg-base" },
   { name: "forest", className: "bg-base" },
   { name: "night", className: "bg-base" },
-  { name: "dracular", className: "bg-base" },
+  { name: "dracula", className: "bg-base" },
   { name: "lemonade", className: "bg-base" },
   { name: "garden", className: "bg-base" },
   { name: "black", className: "bg-base" },
@@ -18,9 +18,6 @@ const themes = [
   { name: "sunset", className: "bg-base" },
   { name: "dim", className: "bg-base" },
   { name: "acid", className: "bg-base" },
-  { name: "emerald", className: "bg-base" },
-  { name: "fantasy", className: "bg-base" },
-
 ];
 
 const Settings = () => {
@@ -34,8 +31,7 @@ const Settings = () => {
 
   return (
     <div>
-      <img src={Arrow} alt="arrow" />
-    <div className="mx-auto max-w-full overflow-x-auto overflow-y-hidden">
+    <div className="mx-auto mt-4 ml-4 max-w-full">
       <ul className="flex justify-between items-center">
         <div className="flex gap-5">
           {themes.map((themeItem) => (

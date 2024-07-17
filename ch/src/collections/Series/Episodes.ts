@@ -16,6 +16,11 @@ const Episodes: CollectionConfig = {
             relationTo: 'media'
         },
         {
+            name: 'episodeNumber',
+            label: 'Episode',
+            type: 'number'
+        },
+        {
             name: 'episodeTitle',
             label: 'Episode Title',
             type: 'text'

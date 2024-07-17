@@ -24,3 +24,31 @@ export const useTimeout = (): [
 
   return [set, clear];
 };
+
+
+export const useInterval = (): [
+  (callback: () => void, delay: number, initialLoad?: boolean) => void,
+  () => void
+] => {
+  const intervalRef = useRef<ReturnType<typeof setInterval>>();
+
+  const clear = useCallback(() => {
+    intervalRef.current && clearInterval(intervalRef.current);
+  }, []);
+
+  const set = useCallback(
+    (callback, delay, initialLoad = false) => {
+      initialLoad && callback();
+
+      clear();
+      intervalRef.current = setInterval(callback, delay);
+    },
+    [clear]
+  );
+
+  useEffect(() => {
+    return clear;
+  }, [clear]);
+
+  return [set, clear];
+};

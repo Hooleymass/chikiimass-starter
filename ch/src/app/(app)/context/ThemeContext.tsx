@@ -15,17 +15,19 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     setIsMounted(true);
-    const storedTheme = localStorage.getItem("theme") || "light";
+    const storedTheme = localStorage.getItem("theme") || "dark";
     setTheme(storedTheme);
   }, []);
 
   if (!isMounted) {
     return (
-    <>
-      <h1>Custom Video Player</h1>
-    </>
-
+      <div className="h-screen flex items-center justify-center">
+        <div className='font-bold uppercase'>
+          chikiimass
+        </div>
+      </div>
     );
+    
   }
 
   const changeTheme = (theme: string) => {

@@ -1,43 +1,75 @@
-"use client"
-import { Image } from "@nextui-org/image";
+"use client";
 import { usePathname } from "next/navigation";
-import React from "react";
-
+import React, { useState } from "react";
 
 type ChannelCardProps = {
   title: string;
   name: string;
   thumbnail: string;
   alt: string;
-  views: string;
+  views: number;
   published: any;
 };
 
-const ChannelCard: React.FC<ChannelCardProps> = ({ title, name, thumbnail, alt, views, published }) => {
+const ChannelCard: React.FC<ChannelCardProps> = ({
+  title,
+  name,
+  thumbnail,
+  alt,
+  views,
+  published,
+}) => {
   const pathname = usePathname();
+  const [isLoading, setIsLoading] = useState(true);
 
-  const cardClassName = pathname === "/"
-    ? "xs:min-w-[288px] sx:min-w-[324px] sm:min-w-[343px] md:min-w-[422px] mx-auto mb-4"
-    : "max-w-[422px] mx-auto mb-4";
+  const cardClassName =
+    pathname === "/"
+      ? "xs:min-w-[288px] sx:min-w-[324px] sm:min-w-[343px] md:min-w-[422px] mx-auto mb-4"
+      : "max-w-[422px] mx-auto mb-4";
+
+  const handleImageLoad = () => {
+    setIsLoading(false);
+  };
 
   return (
     <div className={`${cardClassName}`}>
-      <div>
-        <img className="rounded-lg w-full" src={thumbnail} alt={alt} loading="lazy" width={422}  />
+      <div className="relative">
+        {isLoading && (
+          <div className="rounded-lg w-full h-[250px] bg-gray-200"></div>
+        )}
+        <img
+          className={`rounded-lg w-full ${isLoading ? "hidden" : "block"}`}
+          src={thumbnail}
+          alt={alt}
+          loading="lazy"
+          height={250}
+          width={600}
+          onLoad={handleImageLoad}
+        />
       </div>
       <div className="bg-base-100 p-4">
-        <div className="dark: font-bold uppercase text-base">{title}</div>
-        <div className="text-gray-400 text-sm mt-1">
-          <div>{name}</div>
-          <div className="flex items-center mt-1">
-            <span>{views}</span>
-            <span className="mx-1">•</span>
-            <span>{published}</span>
+        {isLoading ? (
+          <div className="">
+            <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+            <div className="h-3 bg-gray-200 rounded w-1/2 mb-2"></div>
+            <div className="h-3 bg-gray-200 rounded w-1/4"></div>
           </div>
-        </div>
+        ) : (
+          <>
+            <div className="font-bold uppercase text-base">{title}</div>
+            <div className="text-gray-400 text-sm mt-1">
+              <div>{name}</div>
+              <div className="flex items-center mt-1">
+                <span>{views}</span>
+                <span className="mx-1">•</span>
+                <span>{published}</span>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
-}
+};
 
 export default ChannelCard;

@@ -5,10 +5,10 @@ import VolumeHighIcon  from '../../icons/volume-high.svg';
 import VolumeMiddleIcon  from '../../icons/volume-middle.svg';
 import VolumeLowIcon  from '../../icons/volume-low.svg';
 import VolumeMuteIcon  from '../../icons/volume-mute.svg';
-import TrackRewindIcon  from '../../icons/track-rewind.svg';
-import TrackSkipIcon  from '../../icons/track-skip.svg';
+//import TrackRewindIcon  from '../../icons/track-rewind.svg';
+//import TrackSkipIcon  from '../../icons/track-skip.svg';
 import './KeyAction.css';
-import { FastForward, RewindIcon } from 'lucide-react';
+import { RewindIcon as TrackRewindIcon, FastForward as TrackSkipIcon } from 'lucide-react';
 
 export interface KeyActionHandle {
   rewind: HTMLDivElement;
@@ -24,7 +24,6 @@ const KeyAction = forwardRef<KeyActionHandle, KeyActionProps>(
   ({ on, volume }, ref) => {
     const rewindRef = useRef<HTMLDivElement>(null);
     const skipRef = useRef<HTMLDivElement>(null);
-    const volumeRef = useRef<HTMLDivElement>(null);
 
     useImperativeHandle(ref, () => ({
       get rewind() {
@@ -43,7 +42,6 @@ const KeyAction = forwardRef<KeyActionHandle, KeyActionProps>(
           timeout={300}
           mountOnEnter
           unmountOnExit
-          nodeRef={volumeRef}
         >
           <div className="vp-key-action__volume">
             <div className="vp-key-action__volume__container">
@@ -66,13 +64,13 @@ const KeyAction = forwardRef<KeyActionHandle, KeyActionProps>(
 
         <div className="vp-key-action__progress rewind" ref={rewindRef}>
           <div className="vp-key-action__progress__container">
-            <RewindIcon />
+            <TrackRewindIcon />
             <span>- 10 seconds</span>
           </div>
         </div>
         <div className="vp-key-action__progress skip" ref={skipRef}>
           <div className="vp-key-action__progress__container">
-            <FastForward />
+            <TrackSkipIcon />
             <span>+ 10 seconds</span>
           </div>
         </div>

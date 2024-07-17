@@ -8,11 +8,11 @@ const BottomTab = () => {
 
   return (
     <div className="">
-      <div className="btm-nav tabs-boxed fixed bottom-0 w-full bg-primary border-t border-gray-200 sm:hidden xl:hidden lg:hidden">
+      <div className="btm-nav rounded-none tabs-boxed fixed bottom-0 w-full bg-base-100 border-t-primary border-t sm:hidden xl:hidden lg:hidden">
         <Link href="/" passHref>
           <div
-            className={`tab flex-1 text-center ${
-              pathname === "/" ? "tab-active" : ""
+            className={`tab flex-1 text-center hover:bg-base-300 hover:text-secondary ${
+              pathname === "/" ? "bg-base-300 text-secondary" : ""
             }`}
           >
             <Home />
@@ -20,8 +20,8 @@ const BottomTab = () => {
         </Link>
         <Link href="/tv" passHref>
           <div
-            className={`tab flex-1 text-center ${
-              pathname === "/tv" ? "tab-active" : ""
+            className={`tab flex-1 text-center hover:bg-base-300 hover:text-secondary ${
+              pathname === "/tv" ? "bg-base-300 text-secondary" : ""
             }`}
           >
             <Tv />
@@ -29,8 +29,8 @@ const BottomTab = () => {
         </Link>
         <Link href="/settings" passHref>
           <div
-            className={`tab flex-1 text-center ${
-              pathname === "/settings" ? "tab-active" : ""
+            className={`tab flex-1 text-center  hover:bg-base-300 hover:text-secondary ${
+              pathname === "/settings" ? "bg-base-300 text-secondary" : ""
             }`}
           >
             <Settings />

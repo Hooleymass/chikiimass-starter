@@ -8,6 +8,12 @@ const Tv: CollectionConfig = {
     fields: [
         {
             name: 'name',
+            label: 'Name',
+            type:'text'
+        },
+        {
+            name: 'streamUrl',
+            label: 'Stream Url',
             type:'text'
         }
     ]

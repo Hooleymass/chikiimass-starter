@@ -13,8 +13,8 @@ const SideBar = () => {
         <nav className="flex flex-col space-y-4 text-sm mt-4 lg:mt-0">
           <Link href="/" passHref>
             <div
-              className={`hover:bg-base-300 rounded-md p-4 flex flex-col items-center ${
-                pathname === '/' ? 'bg-base-300' : ''
+              className={`hover:bg-base-300 hover:text-secondary rounded-md p-4 flex flex-col items-center ${
+                pathname === '/' ? 'bg-base-300 text-secondary' : ''
               }`}
             >
               <Home size={24} />
@@ -23,8 +23,8 @@ const SideBar = () => {
           </Link>
           <Link href="/tv" passHref>
             <div
-              className={`hover:bg-base-300 rounded-md p-4 flex flex-col items-center ${
-                pathname === '/tv' ? 'bg-base-300' : ''
+              className={`hover:bg-base-300 hover:text-secondary rounded-md p-4 flex flex-col items-center ${
+                pathname === '/tv' ? 'bg-base-300 text-secondary' : ''
               }`}
             >
               <Tv  size={24} />
@@ -33,8 +33,8 @@ const SideBar = () => {
           </Link>
           <Link href="/settings" passHref>
             <div
-              className={`hover:bg-base-300 rounded-md p-4 flex flex-col items-center ${
-                pathname === '/settings' ? 'bg-base-300' : ''
+              className={`hover:bg-base-300 hover:text-secondary rounded-md p-4 flex flex-col items-center ${
+                pathname === '/settings' ? 'bg-base-300 text-secondary' : ''
               }`}
             >
               <Settings  size={24} />

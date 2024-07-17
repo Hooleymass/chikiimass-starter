@@ -25,10 +25,13 @@ const Header = () => {
     }, [isExternalSidebarOpen]);
   
     return (
-      <header className="sticky top-0 w-full  p-4 z-10">
-        <button onClick={toggleExternalSidebar} >
+      <header className="sticky top-0 w-full py-4 sm:p-4 z-10">
+        <div className="flex flex-row pl-2">
+        <button onClick={toggleExternalSidebar} className='hidden sm:block' >
           <Menu size={24} />
         </button>
+          <div className="sm:px-4 font-bold uppercase">Chikiimass</div>
+        </div>
         {/* External Sidebar */}
         <ExternalSidebar isOpen={isExternalSidebarOpen} toggleSidebar={toggleExternalSidebar} />
       </header>

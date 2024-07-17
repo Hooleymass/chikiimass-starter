@@ -1,32 +1,38 @@
 import { useState, memo, useCallback, useRef, useEffect } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
-import ArrowLeftIcon from '../../../icons/arrow-left.svg';
-import { ArrowLeft } from 'lucide-react';
+//import ArrowLeftIcon from '../../../icons/arrow-left.svg';
+import { ArrowLeft as ArrowLeftIcon } from 'lucide-react';
 
 interface DropdownProps {
   on: boolean;
   playbackRates: number[];
+  resolutions: shaka.extern.TrackList;
   activePlaybackRate: number;
+  activeResolutionHeight: number | 'auto';
   onClose: (on: boolean) => void;
   onChangePlaybackRate: (playbackRate: number) => void;
+  onChangeResolution: (resolution: shaka.extern.Track | 'auto') => void;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
   on,
   playbackRates,
+  resolutions,
   activePlaybackRate,
+  activeResolutionHeight,
   onClose,
   onChangePlaybackRate,
+  onChangeResolution,
 }) => {
   const [isMounted, setIsMounted] = useState(false);
   const [isIndex, setIsIndex] = useState(true);
   const [activeType, setActiveType] = useState<'speed' | 'resolution'>('speed');
-  const [dropdownHeight, setDropdownHeight] = useState<'initial' | number>('initial');
+  const [dropdownHeight, setDropdownHeight] = useState<'initial' | number>(
+    'initial'
+  );
 
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const indexMenuRef = useRef<HTMLDivElement>(null);
-  const mainMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!isMounted) return;
@@ -85,58 +91,101 @@ const Dropdown: React.FC<DropdownProps> = ({
     [onChangePlaybackRate]
   );
 
+  const selectResolutionHandler = useCallback(
+    (resolution: shaka.extern.Track | 'auto') => {
+      return () => {
+        setIsIndex(true);
+        onChangeResolution(resolution);
+      };
+    },
+    [onChangeResolution]
+  );
+
+  const matchedResolution = resolutions.find(
+    (resolution) => resolution.height === activeResolutionHeight
+  );
+  const autoResolutionHeight = resolutions.find(
+    (resolution) => resolution.active
+  )?.height;
+
   const indexMenu = (
-    <div className="vp-dropdown__menu" ref={indexMenuRef}>
+    <div className="vp-dropdown__menu">
       <ul className="vp-dropdown__list">
         <li className="vp-dropdown__item" onClick={selectMenuHandler('speed')}>
           <span>Speed</span>
           <span>x {activePlaybackRate}</span>
         </li>
-        {/* <li
-          className="vp-dropdown__item"
-          onClick={selectMenuHandler('resolution')}
-        >
-          <span>Resolution</span>
-          <span>1080p</span>
-        </li> */}
+        {resolutions.length > 0 && (
+          <li
+            className="vp-dropdown__item"
+            onClick={selectMenuHandler('resolution')}
+          >
+            <span>Resolution</span>
+            <span>
+              {activeResolutionHeight === 'auto' || !matchedResolution
+                ? `Auto (${autoResolutionHeight}p)`
+                : `${activeResolutionHeight}p`}
+            </span>
+          </li>
+        )}
       </ul>
     </div>
   );
 
+  const playbackList = (
+    <ul className="vp-dropdown__list">
+      {playbackRates.map((playbackRate) => (
+        <li
+          key={playbackRate}
+          className={`vp-dropdown__item${
+            activePlaybackRate === playbackRate ? ' active' : ''
+          }`}
+          onClick={selectPlaybackRateHandler(playbackRate)}
+        >
+          {playbackRate}
+        </li>
+      ))}
+    </ul>
+  );
+
+  const resolutionList = (
+    <ul className="vp-dropdown__list">
+      {resolutions.map((resolution) => (
+        <li
+          key={resolution.id}
+          className={`vp-dropdown__item${
+            activeResolutionHeight === resolution.height ? ' active' : ''
+          }`}
+          onClick={selectResolutionHandler(resolution)}
+        >
+          {resolution.height}p
+        </li>
+      ))}
+      <li
+        className={`vp-dropdown__item${
+          activeResolutionHeight === 'auto' || !matchedResolution
+            ? ' active'
+            : ''
+        }`}
+        onClick={selectResolutionHandler('auto')}
+      >
+        <span>Auto</span>
+      </li>
+    </ul>
+  );
+
   const mainMenu = (
-    <div className="vp-dropdown__menu" ref={mainMenuRef}>
+    <div className="vp-dropdown__menu">
       <div className="vp-dropdown__label" onClick={() => setIsIndex(true)}>
-        <ArrowLeft />
+        <ArrowLeftIcon />
         <span>
           {activeType === 'speed' && 'Speed'}
           {activeType === 'resolution' && 'Resolution'}
         </span>
       </div>
       <ul className="vp-dropdown__list">
-        {activeType === 'speed' &&
-          playbackRates.map((playbackRate) => (
-            <li
-              key={playbackRate}
-              className={`vp-dropdown__item${
-                activePlaybackRate === playbackRate ? ' active' : ''
-              }`}
-              onClick={selectPlaybackRateHandler(playbackRate)}
-            >
-              {playbackRate}
-            </li>
-          ))}
-        {/* {activeType === 'resolution' &&
-          [540, 720, 1080].map((resolution) => (
-            <li
-              key={resolution}
-              className={`vp-dropdown__item${
-                resolution === 1080 ? ' active' : ''
-              }`}
-              onClick={() => setIsIndex(true)}
-            >
-              {resolution}
-            </li>
-          ))} */}
+        {activeType === 'speed' && playbackList}
+        {activeType === 'resolution' && resolutionList}
       </ul>
     </div>
   );
@@ -150,7 +199,6 @@ const Dropdown: React.FC<DropdownProps> = ({
       unmountOnExit
       onEntered={dropdownEnteredHandler}
       onExited={dropdownExitedHandler}
-      nodeRef={dropdownRef}
     >
       <div
         className="vp-dropdown"
@@ -164,7 +212,6 @@ const Dropdown: React.FC<DropdownProps> = ({
           mountOnEnter
           unmountOnExit
           onEnter={calcHeight}
-          nodeRef={indexMenuRef}
         >
           {indexMenu}
         </CSSTransition>
@@ -176,7 +223,6 @@ const Dropdown: React.FC<DropdownProps> = ({
           mountOnEnter
           unmountOnExit
           onEnter={calcHeight}
-          nodeRef={mainMenuRef}
         >
           {mainMenu}
         </CSSTransition>

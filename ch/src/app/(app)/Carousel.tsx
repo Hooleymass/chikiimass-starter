@@ -1,33 +1,56 @@
 'use client'
 import { useEffect, useRef } from 'react';
 
-const AutoCarousel = () => {
-  const carouselRef = useRef(null);
+interface AutoCarouselProps {
+  image1: string
+  image2: string
+  image3: string
+  image4: string
+}
+
+const AutoCarousel: React.FC<AutoCarouselProps> = ({image1, image2, image3, image4}) => {
+  const carouselRef = useRef<HTMLDivElement>(null);
   const items = [
-    "https://img.daisyui.com/images/stock/photo-1625726411847-8cbb60cc71e6.jpg",
-    "https://img.daisyui.com/images/stock/photo-1609621838510-5ad474b7d25d.jpg",
-    "https://img.daisyui.com/images/stock/photo-1414694762283-acccc27bca85.jpg",
-    "https://img.daisyui.com/images/stock/photo-1665553365602-b2fb8e5d1707.jpg"
+    image1,
+    image2,
+    image3,
+    image4
   ];
 
   useEffect(() => {
     const carousel = carouselRef.current;
+    if (!carousel) return;
+    
     let index = 0;
+    const itemCount = items.length;
 
     const interval = setInterval(() => {
-      index = (index + 1) % items.length;
+      index = (index + 1) % itemCount;
+
+      // Move to the next slide
       carousel.scrollTo({
         left: index * carousel.clientWidth,
         behavior: 'smooth',
       });
-    }, 3000); // Change every 3 seconds
+
+      // If it's the last slide, reset to the start after the transition
+      if (index === itemCount - 1) {
+        setTimeout(() => {
+          index = 0;
+          carousel.scrollTo({
+            left: 0,
+            behavior: 'auto',
+          });
+        }, 500); // Adjust this timeout to match the scroll behavior
+      }
+    }, 5000); // Change every 5 seconds
 
     return () => clearInterval(interval);
   }, []);
 
   return (
     <div ref={carouselRef} className="carousel w-full overflow-x-auto flex snap-x">
-      {items.map((src, idx) => (
+      {items.concat(items[0]).map((src, idx) => (
         <div key={idx} className="carousel-item w-full flex-shrink-0 snap-center">
           <img src={src} className="w-[100%] xs:aspect-video" alt={`Slide ${idx + 1}`} />
         </div>
