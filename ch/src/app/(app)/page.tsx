@@ -1,12 +1,14 @@
-import React from 'react'
-import Home from './Home'
-import { getSeries } from './getSeries';
+import { getSeries } from "./getSeries";
+import Home from "./Home";
 
+//src="http://localhost:8003/EP.10.v1.1717697110.480p.mp4"
 const page = async () => {
-  const data = await getSeries();
+  const series = await getSeries();
   return (
-    <Home series={data} />
-  )
+    <div>
+      <Home series={series}/>
+    </div>
+  );
 }
 
-export default page
+export default page;

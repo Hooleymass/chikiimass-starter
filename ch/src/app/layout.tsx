@@ -78,6 +78,20 @@ export const metadata: Metadata = {
     },
   },
   category: 'entertainment',
+  verification: {
+    google: 'google',
+    yahoo: 'yahoo',
+    yandex: 'yandex',
+    other: {
+      me: ['chikiimass@gmail.com', 'https://chikiimass.tech']
+    }
+  },
+  alternates: {
+    canonical: 'MY_SITE_LINK',
+    media: {
+      'only screen and (max-width: 600px': "."
+    }
+  }
 }
 
 export default function RootLayout({

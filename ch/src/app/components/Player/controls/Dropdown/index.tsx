@@ -1,29 +1,23 @@
 import { useState, memo, useCallback, useRef, useEffect } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
-//import ArrowLeftIcon from '../../../icons/arrow-left.svg';
+//import { ReactComponent as ArrowLeftIcon } from 'icons/arrow-left.svg';
 import { ArrowLeft as ArrowLeftIcon } from 'lucide-react';
 
 interface DropdownProps {
   on: boolean;
   playbackRates: number[];
-  resolutions: shaka.extern.TrackList;
   activePlaybackRate: number;
-  activeResolutionHeight: number | 'auto';
   onClose: (on: boolean) => void;
   onChangePlaybackRate: (playbackRate: number) => void;
-  onChangeResolution: (resolution: shaka.extern.Track | 'auto') => void;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
   on,
   playbackRates,
-  resolutions,
   activePlaybackRate,
-  activeResolutionHeight,
   onClose,
   onChangePlaybackRate,
-  onChangeResolution,
 }) => {
   const [isMounted, setIsMounted] = useState(false);
   const [isIndex, setIsIndex] = useState(true);
@@ -91,23 +85,6 @@ const Dropdown: React.FC<DropdownProps> = ({
     [onChangePlaybackRate]
   );
 
-  const selectResolutionHandler = useCallback(
-    (resolution: shaka.extern.Track | 'auto') => {
-      return () => {
-        setIsIndex(true);
-        onChangeResolution(resolution);
-      };
-    },
-    [onChangeResolution]
-  );
-
-  const matchedResolution = resolutions.find(
-    (resolution) => resolution.height === activeResolutionHeight
-  );
-  const autoResolutionHeight = resolutions.find(
-    (resolution) => resolution.active
-  )?.height;
-
   const indexMenu = (
     <div className="vp-dropdown__menu">
       <ul className="vp-dropdown__list">
@@ -115,63 +92,15 @@ const Dropdown: React.FC<DropdownProps> = ({
           <span>Speed</span>
           <span>x {activePlaybackRate}</span>
         </li>
-        {resolutions.length > 0 && (
-          <li
-            className="vp-dropdown__item"
-            onClick={selectMenuHandler('resolution')}
-          >
-            <span>Resolution</span>
-            <span>
-              {activeResolutionHeight === 'auto' || !matchedResolution
-                ? `Auto (${autoResolutionHeight}p)`
-                : `${activeResolutionHeight}p`}
-            </span>
-          </li>
-        )}
+        {/* <li
+          className="vp-dropdown__item"
+          onClick={selectMenuHandler('resolution')}
+        >
+          <span>Resolution</span>
+          <span>1080p</span>
+        </li> */}
       </ul>
     </div>
-  );
-
-  const playbackList = (
-    <ul className="vp-dropdown__list">
-      {playbackRates.map((playbackRate) => (
-        <li
-          key={playbackRate}
-          className={`vp-dropdown__item${
-            activePlaybackRate === playbackRate ? ' active' : ''
-          }`}
-          onClick={selectPlaybackRateHandler(playbackRate)}
-        >
-          {playbackRate}
-        </li>
-      ))}
-    </ul>
-  );
-
-  const resolutionList = (
-    <ul className="vp-dropdown__list">
-      {resolutions.map((resolution) => (
-        <li
-          key={resolution.id}
-          className={`vp-dropdown__item${
-            activeResolutionHeight === resolution.height ? ' active' : ''
-          }`}
-          onClick={selectResolutionHandler(resolution)}
-        >
-          {resolution.height}p
-        </li>
-      ))}
-      <li
-        className={`vp-dropdown__item${
-          activeResolutionHeight === 'auto' || !matchedResolution
-            ? ' active'
-            : ''
-        }`}
-        onClick={selectResolutionHandler('auto')}
-      >
-        <span>Auto</span>
-      </li>
-    </ul>
   );
 
   const mainMenu = (
@@ -184,8 +113,30 @@ const Dropdown: React.FC<DropdownProps> = ({
         </span>
       </div>
       <ul className="vp-dropdown__list">
-        {activeType === 'speed' && playbackList}
-        {activeType === 'resolution' && resolutionList}
+        {activeType === 'speed' &&
+          playbackRates.map((playbackRate) => (
+            <li
+              key={playbackRate}
+              className={`vp-dropdown__item${
+                activePlaybackRate === playbackRate ? ' active' : ''
+              }`}
+              onClick={selectPlaybackRateHandler(playbackRate)}
+            >
+              {playbackRate}
+            </li>
+          ))}
+        {/* {activeType === 'resolution' &&
+          [540, 720, 1080].map((resolution) => (
+            <li
+              key={resolution}
+              className={`vp-dropdown__item${
+                resolution === 1080 ? ' active' : ''
+              }`}
+              onClick={() => setIsIndex(true)}
+            >
+              {resolution}
+            </li>
+          ))} */}
       </ul>
     </div>
   );

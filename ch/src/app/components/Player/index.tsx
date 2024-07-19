@@ -1,5 +1,4 @@
 'use client'
-import shaka from 'shaka-player';
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useTimeout, useInterval } from "./hooks/timer-hook";
 import { formatTime } from "./hooks/format";
@@ -24,7 +23,13 @@ interface VideoPlayerProps {
   autoPlay?: boolean;
 }
 
-const Player: React.FC<VideoPlayerProps> = ({ src, autoPlay = true }) => {
+interface VideoPlayerProps {
+  src: string;
+  autoPlay?: boolean;
+  mute?:boolean;
+}
+
+const Player: React.FC<VideoPlayerProps> = ({ src, autoPlay=true, mute=true }) => {
   const [displayControls, setDisplayControls] = useState(true);
   const [playbackState, setPlaybackState] = useState(false);
   const [volumeState, setVolumeState] = useLocalStorage('video-volume', 1);
@@ -44,10 +49,6 @@ const Player: React.FC<VideoPlayerProps> = ({ src, autoPlay = true }) => {
     'video-playbackrate',
     1
   );
-  const [resolutions, setResolutions] = useState<shaka.extern.TrackList>([]);
-  const [activeResolutionHeight, setActiveResolutionHeight] = useLocalStorage<
-    number | 'auto'
-  >('video-resolution' || 'auto');
   const [displayLoader, setDisplayLoader] = useState(true);
   const [volumeKeyAction, setvolumeKeyAction] = useState(false);
   const [videoError, setVideoError] = useState<MediaError | null>(null);
@@ -56,7 +57,6 @@ const Player: React.FC<VideoPlayerProps> = ({ src, autoPlay = true }) => {
   const videoContainerRef = useRef<HTMLDivElement>(null);
   const videoKeyActionRef = useRef<KeyActionHandle>(null);
 
-  const shakaPlayer = useRef<shaka.Player>();
   const playPromise = useRef<Promise<void>>();
   const volumeData = useRef(volumeState || 1);
   const progressSeekData = useRef(0);
@@ -64,7 +64,6 @@ const Player: React.FC<VideoPlayerProps> = ({ src, autoPlay = true }) => {
   const [setControlsTimeout] = useTimeout();
   const [setKeyActionVolumeTimeout] = useTimeout();
   const [setLoaderTimeout, clearLoaderTimeout] = useTimeout();
-  const [setResolutionInterval, clearResolutionInterval] = useInterval();
 
   /**
    * TOGGLE SHOWING CONTROLS
@@ -379,22 +378,6 @@ const Player: React.FC<VideoPlayerProps> = ({ src, autoPlay = true }) => {
     [setActivePlaybackRate]
   );
 
-  const changeResolutionHandler = useCallback(
-    (resolution: shaka.extern.Track | 'auto') => {
-      const player = shakaPlayer.current!;
-
-      if (resolution === 'auto') {
-        player.configure({ abr: { enabled: true } });
-        setActiveResolutionHeight('auto');
-      } else {
-        player.configure({ abr: { enabled: false } });
-        player.selectVariantTrack(resolution);
-        setActiveResolutionHeight(resolution.height);
-      }
-    },
-    [setActiveResolutionHeight]
-  );
-
   /**
    * KEYBOARD SHORTKUTS
    */
@@ -467,21 +450,9 @@ const Player: React.FC<VideoPlayerProps> = ({ src, autoPlay = true }) => {
 
   const videoLoadedHandler = useCallback(() => {
     const video = videoRef.current!;
-    const player = shakaPlayer.current;
 
     video.volume = volumeState;
     video.playbackRate = activePlaybackRate;
-
-    if (player && resolutions.length > 0 && activeResolutionHeight !== 'auto') {
-      const matchedResolution = resolutions.find(
-        (track) => track.height === activeResolutionHeight
-      );
-
-      if (matchedResolution) {
-        player.configure({ abr: { enabled: false } });
-        player.selectVariantTrack(matchedResolution);
-      }
-    }
 
     setVideoDuration(video.duration);
     timeChangeHandler();
@@ -495,9 +466,7 @@ const Player: React.FC<VideoPlayerProps> = ({ src, autoPlay = true }) => {
   }, [
     autoPlay,
     volumeState,
-    resolutions,
     activePlaybackRate,
-    activeResolutionHeight,
     timeChangeHandler,
     pipEnterHandler,
     pipExitHandler,
@@ -520,40 +489,6 @@ const Player: React.FC<VideoPlayerProps> = ({ src, autoPlay = true }) => {
    */
 
   useEffect(() => {
-    (async () => {
-      const video = videoRef.current!;
-      const player = new shaka.Player(video);
-
-      await player.load(src);
-      shakaPlayer.current = player;
-
-      const tracks = player.getVariantTracks();
-      const sortedTracks = tracks.sort((trackA, trackB) =>
-        (trackA?.height || 0) < (trackB?.height || 0) ? -1 : 1
-      );
-      setResolutions(sortedTracks);
-    })();
-  }, [src]);
-
-  useEffect(() => {
-    if (activeResolutionHeight !== 'auto') {
-      clearResolutionInterval();
-      return;
-    }
-
-    setResolutionInterval(() => {
-      const player = shakaPlayer.current;
-      if (!player) return;
-
-      const tracks = player.getVariantTracks();
-      const sortedTracks = tracks.sort((trackA, trackB) =>
-        (trackA?.height || 0) < (trackB?.height || 0) ? -1 : 1
-      );
-      setResolutions(sortedTracks);
-    }, 5000);
-  }, [activeResolutionHeight, setResolutionInterval, clearResolutionInterval]);
-
-  useEffect(() => {
     return () => {
       document.removeEventListener('fullscreenchange', fullscreenChangeHandler);
       document.removeEventListener('keydown', keyEventHandler);
@@ -574,6 +509,7 @@ const Player: React.FC<VideoPlayerProps> = ({ src, autoPlay = true }) => {
     >
       <video
         ref={videoRef}
+        src={src}
         controls={false}
         onLoadedMetadata={videoLoadedHandler}
         onClick={togglePlayHandler}
@@ -587,6 +523,7 @@ const Player: React.FC<VideoPlayerProps> = ({ src, autoPlay = true }) => {
         onWaiting={showLoaderHandler}
         onCanPlay={hideLoaderHandler}
         onError={errorHandler}
+        muted={mute}
       />
       <Loader on={displayLoader} />
       <KeyAction
@@ -599,12 +536,9 @@ const Player: React.FC<VideoPlayerProps> = ({ src, autoPlay = true }) => {
         <Dropdown
           on={displayDropdown}
           playbackRates={playbackRates}
-          resolutions={resolutions}
           activePlaybackRate={activePlaybackRate}
-          activeResolutionHeight={activeResolutionHeight}
           onClose={setDisplayDropdown}
           onChangePlaybackRate={changePlaybackRateHandler}
-          onChangeResolution={changeResolutionHandler}
         />
         <div className="vp-controls__header">
           <Time time={currentTimeUI} />

@@ -1,0 +1,16 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+.video__container {
+    position: relative;
+}
+
+.player {
+    padding: 0;
+    margin: 0;
+}

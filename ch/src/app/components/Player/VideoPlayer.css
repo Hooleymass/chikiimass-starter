@@ -30,15 +30,15 @@
   transition: opacity 300ms ease-out;
   z-index: 15;
 }
-.vp-controls__body.hide {
+.vp-controls__header.hide {
   opacity: 0;
   pointer-events: none;
 }
 
-.vp-controls__header.hid {
+/*.vp-controls__header {
   position: absolute;
   bottom: 0%;
-}
+}*/
 .vp-controls__header {
   display: flex;
   justify-content: center;

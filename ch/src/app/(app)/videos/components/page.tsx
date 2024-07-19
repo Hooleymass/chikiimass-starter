@@ -45,11 +45,11 @@ const VideoPage: React.FC<VideoPageProps> = ({ refu, Data, seriesName, seasonStr
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [playerError, setPlayerError] = useState(false);
-  let url = typeof window !== 'undefined' ? window.location.href : '';
+/*   let url = typeof window !== 'undefined' ? window.location.href : '';
   url = url.replace(/\/$/, '');
   let domain = url.replace(/^(https?:\/\/)?/, '');
   domain = domain.replace(/\/$/, '');
-
+ */
   useEffect(() => {
     if (seasonStr.toLowerCase() !== 'season' || episodeStr.toLowerCase() !== 'episode') {
       setError('Invalid URL structure');
@@ -185,7 +185,7 @@ const VideoPage: React.FC<VideoPageProps> = ({ refu, Data, seriesName, seasonStr
                 </a>
               </div>
             ) : (
-              <Player videoUrl={episode?.video} onError={() => setPlayerError(true)} />
+              <Player src={episode?.video}/>
             )}
           </div>
           <h2 className="text-2xl font-semibold mb-2">{episode?.episodeTitle}</h2>
@@ -196,7 +196,7 @@ const VideoPage: React.FC<VideoPageProps> = ({ refu, Data, seriesName, seasonStr
               {episodes.map((ep) => (
                 <button
                   key={ep.episodeNumber}
-                  onClick={() => router.push(`/${refu[0]}/season/${refu[2]}/episode/${ep.episodeNumber}`)}
+                  onClick={() => router.push(`/videos/${refu[0]}/season/${refu[2]}/episode/${ep.episodeNumber}`)}
                   className={`px-4 py-2 rounded ${
                     ep.episodeNumber === parseInt(refu[4])
                       ? 'bg-primary'
@@ -232,7 +232,7 @@ const VideoPage: React.FC<VideoPageProps> = ({ refu, Data, seriesName, seasonStr
           <div>
             <div className="grid grid-cols-1 gap-4">
               {relatedSeasons.map(season => (
-                <Link key={season.seasonNumber} href={`/${refu[0]}/season/${season.seasonNumber}/episode/1`}>
+                <Link key={season.seasonNumber} href={`/videos/${refu[0]}/season/${season.seasonNumber}/episode/1`}>
                   <div className="p-4 border rounded shadow hover:shadow-lg transition">
                     Season {season.seasonNumber}
                   </div>
