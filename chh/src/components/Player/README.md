@@ -1,0 +1,215 @@
+<p align="center">
+  <img src="https://res.cloudinary.com/naptest/image/upload/w_600/react-chikiimass/preview_jhnrup.png">
+</p>
+
+# React chikiimass
+
+[![Build Size](https://img.shields.io/bundlephobia/minzip/react-chikiimass?label=Bundle%20size&style=flat&color=success)](https://bundlephobia.com/result?p=react-chikiimass)
+[![Version](https://img.shields.io/npm/v/react-chikiimass?style=flat&color=success)](https://www.npmjs.com/package/react-chikiimass)
+[![Downloads](https://img.shields.io/npm/dt/react-chikiimass.svg?style=flat&color=success)](https://www.npmjs.com/package/react-chikiimass)
+
+A React video player library with YouTube-like UI
+
+## Demo
+
+[https://react-chikiimass.vercel.app](https://react-chikiimass.vercel.app)
+
+## Feature
+
+- 📹 HTML Video, M3U8 support
+- 🎛 Allow multiple qualities
+- 📱 Fully responsive
+- 🖥 FullScreen cross browser support, even safari on iphone
+- 📖 Subtitles support
+- ⏰ Speed control
+- ⌨️ Keyboard shortcuts
+- ⚙️ Support server side rendering (nextjs)
+- 🛠 No extra dependencies
+- ✅ Auto fallback to default video if render fails on old browsers
+
+## Installation
+
+```bash
+npm i react-chikiimass
+# or
+# yarn add react-chikiimass
+```
+
+## Import
+
+```jsx
+import { Player } from "react-chikiimass";
+import "react-chikiimass/css/main.css";
+```
+
+## Example player
+
+```jsx
+<Player
+  src={[
+    {
+      quality: "Full HD",
+      url:
+        "https://cdn.glitch.me/cbf2cfb4-aa52-4a1f-a73c-461eef3d38e8/1080.mp4",
+    },
+    {
+      quality: 720,
+      url: "https://cdn.glitch.me/cbf2cfb4-aa52-4a1f-a73c-461eef3d38e8/720.mp4",
+    },
+    {
+      quality: 480,
+      url: "https://cdn.glitch.me/cbf2cfb4-aa52-4a1f-a73c-461eef3d38e8/480.mp4",
+    },
+  ]}
+  subtitles={[
+    {
+      lang: "en",
+      language: "English",
+      url:
+        "https://cdn.jsdelivr.net/gh/naptestdev/video-examples@master/en.vtt",
+    },
+    {
+      lang: "fr",
+      language: "French",
+      url:
+        "https://cdn.jsdelivr.net/gh/naptestdev/video-examples@master/fr.vtt",
+    },
+  ]}
+  poster="https://cdn.jsdelivr.net/gh/naptestdev/video-examples@master/poster.png"
+/>
+```
+
+## Props
+
+| prop                     | type                                                                                                                           | description                                                                                            |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| **src**                  | { quality: number \| string; url: string; }[] \| string;                                                                       | One url of video or array of qualities                                                                 |
+| **subtitles**            | { lang: string; language: string; url: string; }[]                                                                             | Array of subtitles, the first one will be default. Subtitle **must** be in .vtt format.                |
+| **dimensions**           | number \| { width: number \| string; height: number \| string }                                                                | Number: aspect ratio (height/width). Default: 56.25% (9/16) Width, height: set custom width and height |
+| **primaryColor**         | string                                                                                                                         | Customize the primary color. Default: #ff0000                                                          |
+| **poster**               | string                                                                                                                         | The url of poster image                                                                                |
+| **seekDuration**         | number                                                                                                                         | Seek duration when pressing left/right key. Default: 10                                                |
+| **playerKey**            | string                                                                                                                         | Unique user key to store video state in localStorage                                                   |
+| **internationalization** | string                                                                                                                         | See internationalization section below                                                                 |
+| **playerRef**            | RefObject\<HTMLVideoElement\>                                                                                                  | Use your own ref to control the video player                                                           |
+| **pictureInPicture**     | boolean                                                                                                                        | Show picture in picture button                                                                         |
+| **keyboardShortcut**     | boolean \| { pause?: boolean; rewind?: boolean; forward?: boolean; fullScreen?: boolean; mute?: boolean; subtitle?: boolean; } | Customize keyboard shortcuts                                                                           |
+
+## Examples
+
+### Single src
+
+```jsx
+<Player src="/your-video.mp4" />
+```
+
+### Full width, height
+
+```jsx
+<Player src="/your-video.mp4" dimensions={{ width: "100%", height: "100%" }} />
+```
+
+### Custom props for video
+
+This library uses **render props** to allow user to set custom render component
+
+```jsx
+<Player src="/your-video.mp4">
+  {(ref, props) => <video ref={ref} {...props} autoPlay loop />}
+</Player>
+```
+
+### Custom event
+
+```jsx
+<Player src="/your-video.mp4">
+  {(ref, { onPause, ...others }) => (
+    <video
+      ref={ref}
+      {...others}
+      onPause={e => {
+        // The library original event
+        onPause && onPause(e);
+
+        // Do something here
+        console.log("Paused");
+      }}
+    />
+  )}
+</Player>
+```
+
+### Usage with m3u8 / HLS
+
+Install react-hls-player
+
+```
+npm i react-hls-player --force
+```
+
+Usage
+
+```jsx
+import ReactHlsPlayer from "react-hls-player";
+
+<Player src="/your-video.m3u8">
+  {(ref, props) => <ReactHlsPlayer playerRef={ref} {...props} />}
+</Player>;
+```
+
+### Get video currentTime using custom ref
+
+```jsx
+const ref = useRef(null);
+
+useEffect(() => {
+  ref.current?.addEventListener("timeupdate", () => {
+    console.log(ref.current?.currentTime);
+  });
+}, []);
+
+<Player playerRef={ref} src="/your-video.mp4" />;
+```
+
+### Disable keyboard shortcuts
+
+```jsx
+<Player src="/your-video.mp4" keyboardShortcut={false} />
+
+// or
+
+<Player
+  src="/your-video.mp4"
+  keyboardShortcut={{
+    pause: false,
+    forward: true,
+    rewind: true,
+    fullScreen: true,
+    mute: true,
+    subtitle: true,
+  }}
+/>
+```
+
+## Internationalization
+
+| property                    | default              |
+| --------------------------- | -------------------- |
+| tooltipsPlay                | Play (k)             |
+| tooltipsPause               | Pause (k)            |
+| tooltipsMute                | Mute (m)             |
+| tooltipsUnmute              | Unmute (m)           |
+| tooltipsSubtitles           | Subtitles (c)        |
+| tooltipsSettings            | Settings             |
+| tooltipsFullscreen          | Full Screen (f)      |
+| tooltipsExitFullscreen      | Exit full screen (f) |
+| settingsPlaybackSpeed       | Playback Speed       |
+| settingsPlaybackSpeedNormal | Normal               |
+| settingsSubtitles           | Subtitles            |
+| settingsSubtitlesOff        | Off                  |
+| settingsQuality             | Quality              |
+| settingsModalOff            | OK                   |
+
+## Issues
+
+If you have some bug or have any feature request, feel free to submit an issue on the [github repo](https://github.com/napthedev/react-chikiimass.git).

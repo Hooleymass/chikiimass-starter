@@ -1,0 +1,57 @@
+.chikiimass {
+  --control-spacing: min(3vw, 20px);
+  cursor: none;
+
+  &-controls-hovered:hover &-controls {
+    opacity: 1 !important;
+    visibility: visible !important;
+    cursor: default;
+  }
+
+  &-controls-hovered:hover {
+    cursor: pointer;
+  }
+
+  &-time {
+    white-space: nowrap;
+  }
+
+  &-controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 56px;
+    background: linear-gradient(to bottom, transparent, #00000091);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s;
+    z-index: 2;
+    cursor: none;
+
+    &-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      flex-grow: 1;
+      padding: 0 8px 6px 8px;
+    }
+
+    &-left {
+      display: flex;
+      gap: var(--control-spacing);
+      align-items: center;
+      padding: 0 var(--control-spacing);
+    }
+
+    &-right {
+      display: flex;
+      gap: var(--control-spacing);
+      align-items: center;
+      padding: 0 var(--control-spacing);
+    }
+  }
+}
