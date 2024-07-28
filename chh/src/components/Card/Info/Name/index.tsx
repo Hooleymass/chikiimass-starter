@@ -1,5 +1,5 @@
+import Link from 'next/link';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 interface NameProps {
   name: string;
@@ -7,7 +7,7 @@ interface NameProps {
 
 const Name: React.FC<NameProps> = ({ name }) => {
   return (
-    <Link to={`/info/${name}`}>
+    <Link href={`/info/${name}`}>
       {name}
     </Link>
   );

@@ -13,7 +13,7 @@ export async function gettv() {
 }
  */
 
-import { getPayloadHMR } from '@payloadcms/next/utilities';
+/* import { getPayloadHMR } from '@payloadcms/next/utilities';
 import configPromise from '@payload-config';
 import { unstable_cache } from 'next/cache';
 
@@ -45,3 +45,24 @@ export async function gettv() {
 
   return tv;
 }
+ */
+
+import { getPayloadHMR } from '@payloadcms/next/utilities';
+import configPromise from '@payload-config';
+import { unstable_cache } from 'next/cache';
+
+export async function fetchTvData() {
+  const payload = await getPayloadHMR({ config: configPromise });
+  const tv = await payload.find({
+    collection: 'series',
+    draft: false,
+    depth: 2,
+  });
+  return tv;
+}
+
+export const gettv = unstable_cache(
+  async () => await fetchTvData(),
+  ['tv-data-cache-key'],  // Use an appropriate cache key
+  { tags: ['tv'] }        // Optional: add tags for granular cache control
+);

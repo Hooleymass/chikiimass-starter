@@ -8,6 +8,7 @@ import formatTime from '@/app/lib/formatTime';
 import { WatchedVideosContext } from './context/WatchedVideosContext';
 import Head from 'next/head';
 import { Metadata } from 'next';
+import Card from '@/components/Card';
 
 interface HomeProps {
   series: {
@@ -90,13 +91,13 @@ const Home: React.FC<HomeProps> = ({ series }) => {
                       href={`/videos/${episode.seriesName}/season/${episode.seasonNumber}/episode/${episode.episodeNumber}`}
                       key={index}
                     >
-                      <ChannelCard
+                      <Card
                         thumbnail={episode.poster.url || ''}
                         alt={episode.poster.alt || 'alt text'}
                         title={episode.episodeTitle}
                         name={episode.seriesName}
                         views={episode.episodeNumber}
-                        published={formatTime(episode.poster.createdAt)}
+                        time={formatTime(episode.poster.createdAt)}
                       />
                     </Link>
                   ))}
@@ -120,7 +121,7 @@ const Home: React.FC<HomeProps> = ({ series }) => {
                     })
                   }
                 >
-                  <ChannelCard
+                  <Card
                     thumbnail={episode.poster.url || ''}
                     alt={episode.poster.alt || 'alt text'}
                     title={episode.episodeTitle}

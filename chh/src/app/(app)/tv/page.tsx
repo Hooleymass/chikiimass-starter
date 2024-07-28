@@ -1,5 +1,5 @@
 import React from 'react';
-import ChannelCard from '@/app/components/UI/ChannelCard';
+import Card from '@/components/Card';
 import Link from 'next/link';
 import formatTime from '@/app/lib/formatTime';
 import { Metadata } from 'next';
@@ -10,7 +10,6 @@ const tv = await payload.find({
   collection: 'series',
   draft: false,
 }); */
-const tv = await gettv();
 
 const shuffleArray = (array: any[]) => {
   for (let i = array.length - 1; i > 0; i--) {
@@ -56,7 +55,8 @@ export const metadata: Metadata = {
   },
 }
 
-const TV = () => {
+const TV = async () => {
+  const tv = await gettv();
   // Flatten and sort episodes
   const episodes = tv.docs.flatMap((series) => {
     return series.seasons.flatMap((season) => {
@@ -95,7 +95,7 @@ const TV = () => {
 
           return (
             <Link href={`/videos/${seriesName}/season/${seasonNumber}/episode/${episodeNumber}`} key={index}>
-              <ChannelCard
+              <Card
                 thumbnail={poster?.url || ''}
                 alt={poster?.alt || 'alt text'}
                 title={episodeTitle}

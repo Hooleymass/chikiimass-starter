@@ -23,7 +23,7 @@ export interface Config {
     'payload-migrations': PayloadMigration;
   };
   db: {
-    defaultIDType: number;
+    defaultIDType: string;
   };
   globals: {};
   locale: null;
@@ -52,7 +52,7 @@ export interface UserAuthOperations {
  * via the `definition` "users".
  */
 export interface User {
-  id: number;
+  id: string;
   name: string;
   role: 'admin' | 'user' | 'regular';
   updatedAt: string;
@@ -76,7 +76,7 @@ export interface User {
  * via the `definition` "media".
  */
 export interface Media {
-  id: number;
+  id: string;
   alt: string;
   updatedAt: string;
   createdAt: string;
@@ -95,7 +95,7 @@ export interface Media {
  * via the `definition` "posts".
  */
 export interface Post {
-  id: number;
+  id: string;
   title?: string | null;
   content: {
     root: {
@@ -121,7 +121,7 @@ export interface Post {
  * via the `definition` "categories".
  */
 export interface Category {
-  id: number;
+  id: string;
   name?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -131,7 +131,7 @@ export interface Category {
  * via the `definition` "genres".
  */
 export interface Genre {
-  id: number;
+  id: string;
   name?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -141,9 +141,9 @@ export interface Genre {
  * via the `definition` "series".
  */
 export interface Series {
-  id: number;
+  id: string;
   name: string;
-  poster?: number | Media | null;
+  poster?: string | Media | null;
   description?: string | null;
   releaseddate?: string | null;
   seasons?:
@@ -152,7 +152,7 @@ export interface Series {
         seasonDescription?: string | null;
         episodes?:
           | {
-              poster?: number | Media | null;
+              poster?: string | Media | null;
               episodeNumber?: number | null;
               episodeTitle?: string | null;
               episodeDescription?: string | null;
@@ -164,8 +164,8 @@ export interface Series {
         id?: string | null;
       }[]
     | null;
-  genres?: (number | Genre)[] | null;
-  categories?: (number | Category)[] | null;
+  genres?: (string | Genre)[] | null;
+  categories?: (string | Category)[] | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -174,8 +174,8 @@ export interface Series {
  * via the `definition` "episodes".
  */
 export interface Episode {
-  id: number;
-  poster?: number | Media | null;
+  id: string;
+  poster?: string | Media | null;
   episodeNumber?: number | null;
   episodeTitle?: string | null;
   episodeDescription?: string | null;
@@ -189,9 +189,9 @@ export interface Episode {
  * via the `definition` "videos".
  */
 export interface Video {
-  id: number;
+  id: string;
   title?: string | null;
-  video?: number | Media | null;
+  video?: string | Media | null;
   thumbnail?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -201,10 +201,10 @@ export interface Video {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: number;
+  id: string;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
   key?: string | null;
   value?:
@@ -224,7 +224,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: number;
+  id: string;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;

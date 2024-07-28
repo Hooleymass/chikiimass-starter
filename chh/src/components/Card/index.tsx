@@ -30,8 +30,16 @@ interface CardProps {
   name: string;
   title: string;
   views: string;
-  time: string
+  time: any
 }
+type ChannelCardProps = {
+  title: string;
+  name: string;
+  thumbnail: string;
+  alt: string;
+  views: number;
+  published: any;
+};
 
 const Card: React.FC<CardProps> = ({ src = '/public/zari.jpg', alt = 'thumbnail', name = "Video Title here", title = "Video Custom Title", time = "22 hours ago", views = "22 M Views" }) => {
   return (

@@ -12,7 +12,13 @@ const nextConfig = {
         return {
           hostname: url.hostname,
           protocol: url.protocol.replace(':', ''),
-        }
+        },
+        {
+          protocol: 'https',
+          hostname: 'chikii.uber.space',
+          port: '',
+          pathname: '/api/**'
+        }  
       }),
     ],
   },

@@ -2,7 +2,7 @@ import React from 'react';
 import Name from './Name';
 import Title from './Title';
 import Details from './Details';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 interface InfoProps {
   name: string;
@@ -14,12 +14,10 @@ interface InfoProps {
 const Info: React.FC<InfoProps> = ({ name, title, time, views }) => {
   return (
     <div className='w-[422] '>
-      
-    <Link to={`/video/${name}/season/`}>
+    
       <Title title={title} />
       <Name name={name} />
       <Details time={time} views={views} />
-    </Link>
     </div>
   );
 };

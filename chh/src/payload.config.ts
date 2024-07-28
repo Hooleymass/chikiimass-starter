@@ -41,14 +41,14 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  db: postgresAdapter({
+/*   db: postgresAdapter({
      pool: {
        connectionString: process.env.POSTGRES_URI || ''
      }
-   }),
-/*   db: mongooseAdapter({
+   }), */
+ db: mongooseAdapter({
     url: process.env.MONGODB_URI || '',
-  }), */
+  }),
   sharp,
   plugins: [
     // storage-adapter-placeholder

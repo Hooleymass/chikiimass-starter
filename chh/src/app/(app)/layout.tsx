@@ -6,9 +6,7 @@ import { WatchedVideosProvider } from "./context/WatchedVideosContext";
 import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import BottomTab from "../components/UI/BottomTab";
-import { RootErrorBoundary } from "@/Hsl/components";
 import { Suspense } from "react";
-import { Loader } from "@/Hsl/components/ui";
 import '@/components/Player/css/main.css'
 
 
@@ -113,8 +111,7 @@ export default function RootLayout({
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
       </head>
       <body>
-      <RootErrorBoundary>
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={<p>Loading ...</p>}>
         <ThemeProvider>
           <ClientThemeWrapper>
           <WatchedVideosProvider>
@@ -133,7 +130,6 @@ export default function RootLayout({
           </ClientThemeWrapper>
         </ThemeProvider>
         </Suspense>
-        </RootErrorBoundary>
       </body>
     </html>
   );

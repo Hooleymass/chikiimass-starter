@@ -2,7 +2,8 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import VideoPlayer from './VideoPlayer';
+import TestPlayer from '@/components/Player/example/TestPlayer';
+import CustomModal from '@/components/CustomModal';
 
 interface Episode {
   id: string;
@@ -45,6 +46,8 @@ const VideoPage: React.FC<VideoPageProps> = ({ refu, Data, seriesName, seasonStr
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [playerError, setPlayerError] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
   /*   let url = typeof window !== 'undefined' ? window.location.href : '';
     url = url.replace(/\/$/, '');
     let domain = url.replace(/^(https?:\/\/)?/, '');
@@ -170,34 +173,35 @@ const VideoPage: React.FC<VideoPageProps> = ({ refu, Data, seriesName, seasonStr
       <div className="lg:flex lg:space-x-4">
         <div className="lg:flex-1">
           <div className="video-container mb-4 sticky lg:sticky lg:top-auto top-0">
-{/*               //<Player src={episode?.video}/>
-              //<Hsl src={episode?.video} playingTitle={episode?.episodeTitle} /> */}
-              <VideoPlayer episode={episode?.video} />
+            {/*               //<Player src={episode?.video}/>
+              //<Hsl  playingTitle={episode?.episodeTitle} /> */}
+            {/* <VideoPlayer episode={episode?.video} /> */}
+            <TestPlayer videoSrc={`${episode?.video}`} />
           </div>
           <h2 className="text-2xl font-semibold mb-2">{episode?.episodeTitle}</h2>
           <p>{episode?.episodeDescription}</p>
           <div className="mt-4">
             <h2 className="text-xl font-semibold mb-2">Episodes in Season {refu[2]}</h2>
-            <div className="flex flex-wrap space-x-2">
+            <div className="flex flex-wrap gap-2 justify-start">
               {episodes.map((ep) => (
                 <button
                   key={ep.episodeNumber}
                   onClick={() => router.push(`/videos/${refu[0]}/season/${refu[2]}/episode/${ep.episodeNumber}`)}
                   className={`px-4 py-2 rounded ${ep.episodeNumber === parseInt(refu[4])
-                      ? 'bg-primary'
-                      : 'bg-secondary hover:bg-blue-700'
+                    ? 'bg-primary'
+                    : 'bg-secondary hover:bg-blue-700'
                     }`}
                 >
                   Episode {ep.episodeNumber}
                 </button>
               ))}
             </div>
-            <a
+            <button
               className="inline-block bg-blue-500 text-white px-4 py-2 mt-2 rounded"
-              onClick={(() => alert('Comming Soon..'))}
+              onClick={() => setShowModal(true)} // Show the modal on click
             >
               Download Video
-            </a>
+            </button>
             {/*  <a
               href={episode?.video}
               download
@@ -227,6 +231,11 @@ const VideoPage: React.FC<VideoPageProps> = ({ refu, Data, seriesName, seasonStr
           </div>
         </div>
       </div>
+      <CustomModal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        message="Coming Soon.."
+      />
     </div>
   );
 }
