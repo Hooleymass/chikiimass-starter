@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 interface ThumbnailProps {
   src: string;
@@ -8,9 +9,10 @@ interface ThumbnailProps {
 }
 
 const Thumbnail: React.FC<ThumbnailProps> = ({ src, alt, width, height }) => {
+  console.log('image link',src)
   return (
     <div>
-      <img src={src} alt={alt} width={width} height={height} loading='eager' className='bg-gray-500 rounded-lg thumbnail'/>
+      <Image src={src} alt={alt} width={width} height={height} priority className='bg-gray-500 rounded-lg thumbnail'/>
     </div>
   );
 };

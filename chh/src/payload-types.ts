@@ -157,7 +157,8 @@ export interface Series {
               episodeTitle?: string | null;
               episodeDescription?: string | null;
               video?: string | null;
-              createdAt?: string | null;
+              duration?: number | null;
+              publishedAt?: string | null;
               id?: string | null;
             }[]
           | null;

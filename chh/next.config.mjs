@@ -18,6 +18,12 @@ const nextConfig = {
           hostname: 'chikii.uber.space',
           port: '',
           pathname: '/api/**'
+        },
+        {
+          protocol: 'https',
+          hostname: 'placehold.co',
+          port: '',
+          pathname: '/**'
         }  
       }),
     ],

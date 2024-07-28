@@ -41,7 +41,7 @@ type ChannelCardProps = {
   published: any;
 };
 
-const Card: React.FC<CardProps> = ({ src = '/public/zari.jpg', alt = 'thumbnail', name = "Video Title here", title = "Video Custom Title", time = "22 hours ago", views = "22 M Views" }) => {
+const Card: React.FC<CardProps> = ({ src = 'https://placehold.co/600x400.webp', alt = 'thumbnail', name = "Video Title here", title = "Video Custom Title", time = "22 hours ago", views = "22 M Views" }) => {
   return (
     <div>
       <div className='vid-list'>

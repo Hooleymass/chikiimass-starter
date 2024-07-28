@@ -8,6 +8,7 @@ import SideBar from "../components/SideBar";
 import BottomTab from "../components/UI/BottomTab";
 import { Suspense } from "react";
 import '@/components/Player/css/main.css'
+import LoadingLine from "@/components/LOading";
 
 
 
@@ -111,7 +112,7 @@ export default function RootLayout({
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
       </head>
       <body>
-      <Suspense fallback={<p>Loading ...</p>}>
+      <Suspense fallback={<LoadingLine />}>
         <ThemeProvider>
           <ClientThemeWrapper>
           <WatchedVideosProvider>
